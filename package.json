@@ -1,0 +1,33 @@
+{
+  "name": "regearbot",
+  "version": "1.0.0",
+  "description": "알비온 온라인 사망자의 리기어를 위한 디스코드 봇",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nks0005/regearBot.git"
+  },
+  "keywords": [
+    "albiononline",
+    "regear"
+  ],
+  "author": "nks0005",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nks0005/regearBot/issues"
+  },
+  "homepage": "https://github.com/nks0005/regearBot#readme",
+  "dependencies": {
+    "@discordjs/builders": "^1.2.0",
+    "@discordjs/rest": "^1.1.0",
+    "@discordjs/voice": "^0.11.0",
+    "axios": "^0.27.2",
+    "discord-api-types": "^0.37.9",
+    "discord.js": "^14.3.0",
+    "google-spreadsheet": "^3.3.0",
+    "xlsx": "^0.18.5"
+  }
+}
