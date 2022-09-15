@@ -124,7 +124,6 @@ module.exports = {
             // 쓰레드 채널에 구글 시트 링크 첨부
             await thread.send(`https://docs.google.com/spreadsheets/d/1qrxQ0ccsM-RdaCs49jG4MYt48ozpuuy-5pkcLRp7L5A/edit#gid=${gid}`);
 
-
             for (const userInfo of arrUserInfo) {
                 const { name, guild, avgIp, Equipment: { mainHand, offHand, head, armor, shoes, cape } } = userInfo;
 
@@ -143,6 +142,7 @@ module.exports = {
                     .addFields({ name: '장비', value: equipMsg });
                 await thread.send({ embeds: [msgEmbed] })
             }
+
             await interaction.editReply(`
             쓰레드 생성 및 처리 완료
             =GOSTOP=

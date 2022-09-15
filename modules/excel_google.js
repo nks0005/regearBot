@@ -33,12 +33,9 @@ class Excel_Google {
             const newSheet = await this.doc.addSheet({ title: `${sheetName}`, headerValues: ['닉네임', '길드명', '평균아이템레벨', '주무기', '보조무기', '머리', ' 갑바', '신발', '망토'] });
             ret = newSheet.sheetId;
 
-            //console.log(arrUserInfo.length);
-
-
             for (const userInfo of arrUserInfo) {
                 await newSheet.addRow({
-                    닉네임: userInfo.name + '\n\n\n\n\n\n',
+                    닉네임: userInfo.name + '\n\n\n\n\n\n', // 셸 크기를 늘릴 방법이 없음.
                     길드명: userInfo.guild,
                     평균아이템레벨: parseInt(userInfo.avgIp),
                     주무기: Util.Item2Url(userInfo.Equipment.mainHand),
