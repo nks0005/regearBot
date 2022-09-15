@@ -13,13 +13,17 @@ class Util {
     }
 
     static Type2Kr(Type) {
-        if (Type == null) return Type;
+        if (Type == null) return { kr: '', tier: '' };
+
+        let tier = Type.split('@')[1];
+        if (tier == undefined) tier = 0;
+        tier = parseInt(tier);
 
         for (const item of jsonItems) {
             if (Type == item['UniqueName']) {
                 let ret = item['LocalizedNames']['KO-KR'];
 
-                return ret;
+                return { kr: ret, tier: tier };
             }
         }
     }

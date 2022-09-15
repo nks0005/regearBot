@@ -129,7 +129,7 @@ module.exports = {
             if (thread.joinable) await thread.join();
             // 쓰레드 채널에 구글 시트 링크 첨부
             await thread.send(`https://docs.google.com/spreadsheets/d/1qrxQ0ccsM-RdaCs49jG4MYt48ozpuuy-5pkcLRp7L5A/edit#gid=${gid}`);
-            await thread.send(`킬보드 ${[...battleIds]}입니다.`);
+            await thread.send(`킬보드 ${[...battleIds]} 입니다.`);
 
             for (const userInfo of arrUserInfo) {
                 const { name, guild, avgIp, Equipment: { mainHand, offHand, head, armor, shoes, cape } } = userInfo;
@@ -137,12 +137,12 @@ module.exports = {
                 const msgEmbed = new EmbedBuilder();
 
                 const equipMsg = `
-                 ${Util.Type2Kr(mainHand) == null ? '' : Util.Type2Kr(mainHand)}
-                 ${Util.Type2Kr(offHand) == null ? '' : Util.Type2Kr(offHand)}
-                 ${Util.Type2Kr(head) == null ? '' : Util.Type2Kr(head)}
-                 ${Util.Type2Kr(armor) == null ? '' : Util.Type2Kr(armor)}
-                 ${Util.Type2Kr(shoes) == null ? '' : Util.Type2Kr(shoes)}
-                 ${Util.Type2Kr(cape) == null ? '' : Util.Type2Kr(cape)}
+                 ${Util.Type2Kr(mainHand).kr}.${Util.Type2Kr(mainHand).tier}
+                 ${Util.Type2Kr(offHand).kr}.${Util.Type2Kr(offHand).tier}
+                 ${Util.Type2Kr(head).kr}.${Util.Type2Kr(head).tier}
+                 ${Util.Type2Kr(armor).kr}.${Util.Type2Kr(armor).tier}
+                 ${Util.Type2Kr(shoes).kr}.${Util.Type2Kr(shoes).tier}
+                 ${Util.Type2Kr(cape).kr}.${Util.Type2Kr(cape).tier}
                  `;
 
                 msgEmbed.setColor('#0099ff').setTitle(`${name} (${parseInt(avgIp)})`)
