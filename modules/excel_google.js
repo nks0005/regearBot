@@ -13,6 +13,7 @@ class Excel_Google {
         this.doc = new GoogleSpreadsheet(this.sheet_id);
     }
 
+    //Invalid requests[0].addSheet: The sheet name cannot be greater than 100 characters.
     async saveSheetInExcel(arrUserInfo, sheetName) {
         let ret = 0;
         try {
@@ -21,7 +22,12 @@ class Excel_Google {
             //console.log(`엑셀 제목 : ${this.doc.title}`);
 
             // 시트 확인
-
+            for (const sheet of this.doc.sheetsByIndex) {
+                if (sheet.title == sheetName) {
+                    //console.log("기존거 삭제.");
+                    await sheet.delete();
+                }
+            }
 
             // 시트 생성
             const newSheet = await this.doc.addSheet({ title: `${sheetName}`, headerValues: ['닉네임', '길드명', '평균아이템레벨', '주무기', '보조무기', '머리', ' 갑바', '신발', '망토'] });
@@ -32,7 +38,7 @@ class Excel_Google {
 
             for (const userInfo of arrUserInfo) {
                 await newSheet.addRow({
-                    닉네임: userInfo.name,
+                    닉네임: userInfo.name + '\n\n\n\n\n\n',
                     길드명: userInfo.guild,
                     평균아이템레벨: parseInt(userInfo.avgIp),
                     주무기: Util.Item2Url(userInfo.Equipment.mainHand),

@@ -3,6 +3,16 @@ const Util = require('../modules/util.js').modules;
 const { EmbedBuilder } = require("discord.js");
 const Excel_Google = require('../modules/excel_google.js').modules;
 
+async function trustAxios(url) {
+    while (true) {
+        try {
+            return await axios.get(url);
+        } catch (err) {
+            trustAxios(url);
+        }
+    }
+}
+
 module.exports = {
     name: "battle",
     description: "",
@@ -36,7 +46,7 @@ module.exports = {
                  * ID로 부터 총 몇킬을 하였는지에 대한 정보를 얻어온다.
                  * https://gameinfo.albiononline.com/api/gameinfo/battles/아이디값
                  */
-                const totalBattleLog = await axios.get(`https://gameinfo.albiononline.com/api/gameinfo/battles/${id}`);
+                const totalBattleLog = await trustAxios(`https://gameinfo.albiononline.com/api/gameinfo/battles/${id}`);
                 if (totalBattleLog.status != 200 || totalBattleLog.data == null) throw `킬보드 ${id}에 대한 정상적인 데이터를 받지 못했습니다.`;
                 await interaction.editReply(`전투 로그 얻는 중...`);
 
@@ -53,7 +63,7 @@ module.exports = {
                 await interaction.editReply(`이벤트 로그 얻는 중...`);
                 for (var i = 0; i < eventLoopCount; i++) {
                     const totalEventLog =
-                        await axios.get(`https://gameinfo.albiononline.com/api/gameinfo/events/battle/${id}?offset=${i==0?0:i*50}&limit=50`);
+                        await trustAxios(`https://gameinfo.albiononline.com/api/gameinfo/events/battle/${id}?offset=${i==0?0:i*50}&limit=50`);
                     if (totalEventLog.status != 200 || totalEventLog.data == null) return;
 
                     for (const eventLog of totalEventLog.data) {
@@ -133,8 +143,8 @@ module.exports = {
                     .addFields({ name: '장비', value: equipMsg });
                 await thread.send({ embeds: [msgEmbed] })
             }
-            await interaction.editReply(`쓰레드 생성 및 처리 완료`);
-            console.log(`
+            await interaction.editReply(`
+            쓰레드 생성 및 처리 완료
             =GOSTOP=
 
             총 킬 수 : ${logGostop.kills}
