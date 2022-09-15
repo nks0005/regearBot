@@ -35,7 +35,7 @@ class Excel_Google {
 
             for (const userInfo of arrUserInfo) {
                 await newSheet.addRow({
-                    닉네임: userInfo.name + '\n\n\n\n\n\n', // 셸 크기를 늘릴 방법이 없음.
+                    닉네임: `\n\n\n\n\n${userInfo.name}`, // 셸 크기를 늘릴 방법이 없음.
                     길드명: userInfo.guild,
                     평균아이템레벨: parseInt(userInfo.avgIp),
                     주무기: Util.Item2Url(userInfo.Equipment.mainHand),
@@ -45,6 +45,8 @@ class Excel_Google {
                     신발: Util.Item2Url(userInfo.Equipment.shoes),
                     망토: Util.Item2Url(userInfo.Equipment.cape)
                 });
+
+                await Util.sleep(500);
             }
 
             return ret;

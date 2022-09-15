@@ -101,7 +101,11 @@ module.exports = {
             // 엑셀 파일로 만든다.
             await interaction.editReply(`엑셀 변환 중...`);
             let excel = new Excel_Google();
-            let gid = await excel.saveSheetInExcel(arrUserInfo, `${[...battleIds]}`);
+            let sheetName = 0;
+            for (const battleid of battleIds) {
+                sheetName += battleid;
+            }
+            let gid = await excel.saveSheetInExcel(arrUserInfo, `${sheetName}`);
             await interaction.editReply(`엑셀 완료`);
 
             // 만든 엑셀 파일을 전송한다.
@@ -110,11 +114,13 @@ module.exports = {
 
             // 쓰레드 생성
             await interaction.editReply(`쓰레드 생성 중...`);
-            let thread = interaction.channel.threads.cache.find(x => x.name === `${[...battleIds]}`);
+
+
+            let thread = interaction.channel.threads.cache.find(x => x.name === `${sheetName}`);
             if (thread != undefined) await thread.delete();
 
             thread = await interaction.channel.threads.create({
-                name: `${[...battleIds]}`,
+                name: `${sheetName}`,
                 autoArchiveDuration: 60,
                 reason: `${[...battleIds]}에 대한 스레드 생성`
             });
@@ -123,6 +129,7 @@ module.exports = {
             if (thread.joinable) await thread.join();
             // 쓰레드 채널에 구글 시트 링크 첨부
             await thread.send(`https://docs.google.com/spreadsheets/d/1qrxQ0ccsM-RdaCs49jG4MYt48ozpuuy-5pkcLRp7L5A/edit#gid=${gid}`);
+            await thread.send(`킬보드 ${[...battleIds]}입니다.`);
 
             for (const userInfo of arrUserInfo) {
                 const { name, guild, avgIp, Equipment: { mainHand, offHand, head, armor, shoes, cape } } = userInfo;
@@ -130,21 +137,22 @@ module.exports = {
                 const msgEmbed = new EmbedBuilder();
 
                 const equipMsg = `
-                ${Util.Type2Kr(mainHand) == null ? 'X' : Util.Type2Kr(mainHand)}
-                ${Util.Type2Kr(offHand) == null ? 'X' : Util.Type2Kr(offHand)}
-                ${Util.Type2Kr(head) == null ? 'X' : Util.Type2Kr(head)}
-                ${Util.Type2Kr(armor) == null ? 'X' : Util.Type2Kr(armor)}
-                ${Util.Type2Kr(shoes) == null ? 'X' : Util.Type2Kr(shoes)}
-                ${Util.Type2Kr(cape) == null ? 'X' : Util.Type2Kr(cape)}
-                `;
+                 ${Util.Type2Kr(mainHand) == null ? '' : Util.Type2Kr(mainHand)}
+                 ${Util.Type2Kr(offHand) == null ? '' : Util.Type2Kr(offHand)}
+                 ${Util.Type2Kr(head) == null ? '' : Util.Type2Kr(head)}
+                 ${Util.Type2Kr(armor) == null ? '' : Util.Type2Kr(armor)}
+                 ${Util.Type2Kr(shoes) == null ? '' : Util.Type2Kr(shoes)}
+                 ${Util.Type2Kr(cape) == null ? '' : Util.Type2Kr(cape)}
+                 `;
 
                 msgEmbed.setColor('#0099ff').setTitle(`${name} (${parseInt(avgIp)})`)
                     .addFields({ name: '장비', value: equipMsg });
-                await thread.send({ embeds: [msgEmbed] })
+                await thread.send({ embeds: [msgEmbed] });
             }
 
             await interaction.editReply(`
-            쓰레드 생성 및 처리 완료
+            ${[...battleIds]} 킬보드입니다.
+            쓰레드 : **${sheetName}**
             =GOSTOP=
 
             총 킬 수 : ${logGostop.kills}
