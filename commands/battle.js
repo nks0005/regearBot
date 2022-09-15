@@ -89,7 +89,7 @@ module.exports = {
             */
 
             let thread = interaction.channel.threads.cache.find(x => x.name === `${id}`);
-            await thread.delete();
+            //await thread.delete();
 
             thread = await interaction.channel.threads.create({
                 name: `${id}`,
