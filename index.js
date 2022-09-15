@@ -41,9 +41,6 @@ client.on('interactionCreate', async interaction => {
     if (!client.commands.has(commandName)) return;
 
 
-
-
-
     // 명령어 실행
     try {
         const Id = interaction.options.getString('id');

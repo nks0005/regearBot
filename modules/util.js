@@ -26,7 +26,7 @@ class Util {
 
     static Item2Url(Item) {
         if (Item == null) return Item;
-        return `=image(https://render.albiononline.com/v1/item/${Item}.png)`;
+        return `=image("https://render.albiononline.com/v1/item/${Item}.png", 4, 100, 100)`;
     }
 
     static async sleep(ms) {
