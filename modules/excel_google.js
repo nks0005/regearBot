@@ -1,6 +1,4 @@
 // https://console.developers.google.com/
-
-const { select } = require('async');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const Util = require('../modules/util.js').modules;
 
