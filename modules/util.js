@@ -13,7 +13,11 @@ class Util {
     }
 
     static Type2Kr(Type) {
-        if (Type == null) return { kr: '', tier: '' };
+        if (Type == null) return { kr: '', tier: '', master: '' };
+
+        let master = Type.split('_')[0].replace('T', '');
+        if (master == undefined) master = 0;
+        master = parseInt(master);
 
         let tier = Type.split('@')[1];
         if (tier == undefined) tier = 0;
@@ -22,8 +26,11 @@ class Util {
         for (const item of jsonItems) {
             if (Type == item['UniqueName']) {
                 let ret = item['LocalizedNames']['KO-KR'];
+                if (ret.includes('의'))
+                    ret = ret.split('의')[1];
 
-                return { kr: ret, tier: tier };
+
+                return { kr: ret, tier: tier, master: master };
             }
         }
     }

@@ -34,6 +34,8 @@ module.exports = {
             let arrUserInfo = new Array();
             let logGostop = { kills: 0, deaths: 0, killFame: 0 };
 
+            if (battleIds.length == 0) throw `입력 값이 올바르지 않습니다.`;
+
             await interaction.reply(`${[...battleIds]}를 처리를 시작합니다.`);
 
             for (const id of battleIds) {
@@ -136,14 +138,23 @@ module.exports = {
 
                 const msgEmbed = new EmbedBuilder();
 
-                const equipMsg = `
-                 ${Util.Type2Kr(mainHand).kr}.${Util.Type2Kr(mainHand).tier}
-                 ${Util.Type2Kr(offHand).kr}.${Util.Type2Kr(offHand).tier}
-                 ${Util.Type2Kr(head).kr}.${Util.Type2Kr(head).tier}
-                 ${Util.Type2Kr(armor).kr}.${Util.Type2Kr(armor).tier}
-                 ${Util.Type2Kr(shoes).kr}.${Util.Type2Kr(shoes).tier}
-                 ${Util.Type2Kr(cape).kr}.${Util.Type2Kr(cape).tier}
-                 `;
+                // TODO - 최적화 필요
+                const arrEquip = new Array();
+                arrEquip.push(mainHand);
+                arrEquip.push(offHand);
+                arrEquip.push(head);
+                arrEquip.push(armor);
+                arrEquip.push(shoes);
+                arrEquip.push(cape);
+
+                let equipMsg = ``;
+                for (const equip of arrEquip) {
+                    if (equip == null) continue;
+
+                    const { kr, master, tier } = Util.Type2Kr(equip);
+                    equipMsg += `${kr} (${master}.${tier})\n`;
+                }
+
 
                 msgEmbed.setColor('#0099ff').setTitle(`${name} (${parseInt(avgIp)})`)
                     .addFields({ name: '장비', value: equipMsg });
