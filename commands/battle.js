@@ -208,6 +208,10 @@ module.exports = {
             });
             collector.on('end', collected => console.log(`Collected ${collected.size} items. 종료합니다.`));
 
+
+            const browser = await puppeteer.launch({ defaultViewport: { x: 10, y: 10, width: 500, height: 500 } });
+            const page = await browser.newPage();
+            await page.setJavaScriptEnabled(true);
             for (const userInfo of arrUserInfo) {
                 const { name, guild, avgIp, Equipment: { mainHand, offHand, head, armor, shoes, cape } } = userInfo;
 
@@ -272,17 +276,12 @@ module.exports = {
                 const changeDir = __dirname.replace('commands', '');
 
 
-                const browser = await puppeteer.launch({ defaultViewport: { x: 10, y: 10, width: 500, height: 500 } });
-                const page = await browser.newPage();
-                await page.setJavaScriptEnabled(true);
-                await page.goto(`file:///${changeDir}tmp/tmp.html`);
 
+                await page.goto(`file:///${changeDir}tmp/tmp.html`);
                 await page.waitForSelector('#example', {
                     timeout: 1000 * 60 * 5,
                     visible: true,
                 });
-
-
                 await page.screenshot({
                     path: `./tmp/tmp.png`
                 });
