@@ -1,5 +1,5 @@
 // 디스코드 봇 모듈
-const { Client, GatewayIntentBits, Collection, ButtonInteraction, ApplicationCommandOptionWithChoicesAndAutocompleteMixin } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
 // 봇 설정 파일
 const { token, prefix } = require('./config/config.json');
@@ -36,29 +36,25 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
     console.log(`${client.user.username} 로그인 성공`);
-
+    const test = async() => {
+        const reactionEmoji = await client.emojis.cache.get('1020947878035849267');
+        console.log(reactionEmoji);
+    }
+    test();
 
 });
-
 client.on('interactionCreate', async interaction => {
     const { commandName } = interaction;
     if (!interaction.isChatInputCommand()) return;
-    // 등록된 명령어가 맞는지 확인
-    if (!client.commands.has(commandName)) return;
 
-
-
-    try {
-        if (!interaction.member.roles.cache.has('1020544016456101939')) { await interaction.reply(`권한이 없습니다!`); return; }
-
-
-        const Id = interaction.options.getString('id');
-        client.commands.get(commandName).execute(interaction, Id);
-    } catch (err) {
-        console.error(err);
-    }
+    const message = await interaction.reply({ content: 'check', fetchReply: true });
+    const react = message.guild.emojis.cache.find(emoji => emoji.name == 'white_check_mark');
+    console.log('🔒');
+    message.react('✅');
 
 
 });
+
+
 
 client.login(token);

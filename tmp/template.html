@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>유저 아이템 그림 생성</title>
+
+    <canvas id="m_canvas" width="500" height="500"></canvas>
+    <script type="text/javascript">
+        async function draw() {
+            try {
+                // 1. canvas 엘리먼트를 취득한다.
+                const canvas = document.getElementById('m_canvas');
+
+                // 2. 2d모드의 그리기 객체를 취득한다. => 이 객체를 통해 canvas에 그림을 그릴 수 있다.
+                const ctx = canvas.getContext("2d");
+
+
+                // 머리 
+                var head = new Image();
+                head.src = "https://render.albiononline.com/v1/item/${head}.png";
+                await head.decode();
+                await ctx.drawImage(head, 165, 30, 130, 130);
+
+                // 망토
+                var cape = new Image();
+                cape.src = "https://render.albiononline.com/v1/item/${cape}.png";
+                await cape.decode();
+                await ctx.drawImage(cape, 320, 20, 130, 130);
+
+
+                // 갑옷
+                var armor = new Image();
+                armor.src = "https://render.albiononline.com/v1/item/${armor}.png";
+                await armor.decode();
+                await ctx.drawImage(armor, 170, 140, 130, 130);
+
+
+                // 무기
+                var mainHand = new Image();
+                mainHand.src = "https://render.albiononline.com/v1/item/${mainHand}.png";
+                await mainHand.decode();
+                await ctx.drawImage(mainHand, 45, 145, 130, 130);
+
+
+                // 보조무기
+                var offHand = new Image();
+                offHand.src = "https://render.albiononline.com/v1/item/${offHand}.png";
+                await offHand.decode();
+                await ctx.drawImage(offHand, 300, 145, 130, 130);
+
+
+                // 신발
+                var shoes = new Image();
+                shoes.src = "https://render.albiononline.com/v1/item/${shoes}.png";
+                await shoes.decode();
+                await ctx.drawImage(shoes, 170, 260, 130, 130);
+
+                var g = document.createElement('div');
+                g.setAttribute("id", "example");
+                g.setAttribute("class", "example");
+
+                document.body.appendChild(g);
+
+            } catch (err) {
+
+            }
+        }
+    </script>
+</head>
+
+<body background="./gear.png" onload="draw()">
+
+
+</body>
+
+</html>
