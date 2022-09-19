@@ -2,6 +2,7 @@ const axios = require('axios');
 const Util = require('../modules/util.js').modules;
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionCollector } = require("discord.js");
 const Excel_Google = require('../modules/excel_google.js').modules;
+const puppeteer = require('puppeteer');
 
 async function trustAxios(url) {
     for (var i = 0; i < 10; i++) {
@@ -139,7 +140,7 @@ module.exports = {
 
             if (thread.joinable) await thread.join();
             // 쓰레드 채널에 구글 시트 링크 첨부
-            await thread.send(`https://docs.google.com/spreadsheets/d/1qrxQ0ccsM-RdaCs49jG4MYt48ozpuuy-5pkcLRp7L5A/edit#gid=${gid}`);
+            //await thread.send(`https://docs.google.com/spreadsheets/d/1qrxQ0ccsM-RdaCs49jG4MYt48ozpuuy-5pkcLRp7L5A/edit#gid=${gid}`);
             await thread.send(`
 ========================================
 \`${[...battleIds]}\` 킬보드입니다.
@@ -209,9 +210,13 @@ module.exports = {
             collector.on('end', collected => console.log(`Collected ${collected.size} items. 종료합니다.`));
 
 
+            const changeDir = __dirname.replace('commands', '');
+
             const browser = await puppeteer.launch({ defaultViewport: { x: 10, y: 10, width: 500, height: 500 } });
             const page = await browser.newPage();
             await page.setJavaScriptEnabled(true);
+
+
             for (const userInfo of arrUserInfo) {
                 const { name, guild, avgIp, Equipment: { mainHand, offHand, head, armor, shoes, cape } } = userInfo;
 
@@ -253,47 +258,50 @@ module.exports = {
 
                 // 사진 생성
                 // template.html 수정
+                while (true) {
+                    try {
 
-                let fs = require('fs');
-                let data = await fs.readFileSync('./tmp/template.html', 'utf-8');
+                        let fs = require('fs');
+                        let data = await fs.readFileSync('./tmp/template.html', 'utf-8');
 
-                data = data.replace("${mainHand}", mainHand);
-                if (mainHand.includes('2H')) data = data.replace('https://render.albiononline.com/v1/item/${offHand}.png', './gray.png');
-                else data = data.replace("${offHand}", offHand);
-                data = data.replace("${cape}", cape);
-                data = data.replace("${head}", head);
-                data = data.replace("${armor}", armor);
-                data = data.replace("${shoes}", shoes);
-                data = data.replace("${cape}", cape);
-
-
-                await fs.writeFileSync('./tmp/tmp.html', data);
-
-                //console.log(__dirname);
-                //C:\Users\root\Documents\GitHub\regearBot\commands
-
-                const puppeteer = require('puppeteer');
-                const changeDir = __dirname.replace('commands', '');
+                        data = data.replace("${mainHand}", mainHand);
+                        if (mainHand.includes('2H')) data = data.replace('https://render.albiononline.com/v1/item/${offHand}.png', './gray.png');
+                        else data = data.replace("${offHand}", offHand);
+                        data = data.replace("${cape}", cape);
+                        data = data.replace("${head}", head);
+                        data = data.replace("${armor}", armor);
+                        data = data.replace("${shoes}", shoes);
+                        data = data.replace("${cape}", cape);
 
 
+                        await fs.writeFileSync(`./tmp/${sheetName}.html`, data);
 
-                await page.goto(`file:///${changeDir}tmp/tmp.html`);
-                await page.waitForSelector('#example', {
-                    timeout: 1000 * 60 * 5,
-                    visible: true,
-                });
-                await page.screenshot({
-                    path: `./tmp/tmp.png`
-                });
-                await browser.close();
+                        //console.log(__dirname);
+                        //C:\Users\root\Documents\GitHub\regearBot\commands
 
+
+                        await page.goto(`file:///${changeDir}tmp/${sheetName}.html`);
+                        await page.waitForSelector('#example', {
+                            timeout: 10000
+                        });
+                        await page.screenshot({
+                            path: `./tmp/${sheetName}.png`
+                        });
+
+
+                        break;
+                    } catch (err) {
+
+                    }
+                }
 
                 // 사진 종료
 
 
 
-                await thread.send({ embeds: [msgEmbed], components: [row], files: ["./tmp/tmp.png"] });
+                await thread.send({ embeds: [msgEmbed], components: [row], files: [`./tmp/${sheetName}.png`] });
             }
+            await browser.close();
 
             await thread.send(`============ 여기까지입니다. ============`);
 
