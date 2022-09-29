@@ -11,6 +11,8 @@ class regear_monitor {
         this.client = Client;
         this.guildId = "1019631923968086086";
         this.channelId = "1022870832487350272";
+
+        
     }
 
     /**
@@ -99,11 +101,18 @@ class regear_monitor {
         }
     }
 
+    async processPermission(msg) {
+        // 명령어 분할
+
+    }
+
     /**
      * 메시지에 사진이 같이 있으면 msg.attachments에 값이 존재한다.
      * @param {*} msg
      */
     async processRegear(msg) {
+
+        if (msg.content.includes('$')) { processPermission(msg); return; };
 
         // 사진이 없다면
         if (msg.attachments.size == 0) return;
@@ -154,7 +163,7 @@ class regear_monitor {
 
         // 생성된 쓰레드안에 메시지 모니터링을 시작합니다.
         {
-            const filter = m => !m.author.bot;
+            const filter = m => !m.author.bot || m.content.includes('$');
             const collector = newThread.createMessageCollector({
                 filter: filter,
                 time: 24 * 60 * 60 * 1000

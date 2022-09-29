@@ -297,8 +297,6 @@ module.exports = {
 
                 // 사진 종료
 
-
-
                 await thread.send({ embeds: [msgEmbed], components: [row], files: [`./tmp/${sheetName}.png`] });
             }
             await browser.close();
